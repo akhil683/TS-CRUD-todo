@@ -1,22 +1,29 @@
-import { useState } from "react"
-import Counter from "./components/Counter"
-import Heading from "./components/Heading"
-import Sections from "./components/Sections"
-import List from "./components/List"
+import { FormEvent, useState } from "react"
+import InputField from "./components/InputField"
+import { Todo } from "./components/Mode"
+import TodoList from "./components/TodoList"
 
-const App = () => {
-  const [ count, setCount ] = useState<number>(1);
+const App : React.FC= () => {
+
+   const [todo, setTodo ] = useState<string>("")
+   const [ todos, setTodos ] = useState<Todo[]>([]);
+
+   const handleAdd = (e: FormEvent) => {
+    e.preventDefault();
+    if(todo) {
+      setTodos([...todos, { id: Date.now(), todo, isDone: false }]);
+      setTodo("");
+    }
+   } 
+
+console.log(todos);
 
   return (
-    <>
-      <h1 className=" text-red-500 text-3xl">Hello World</h1>
-      <Heading title="Hello Guys" />
-      <Sections title="Different Title">
-        This is my section.
-      </Sections>
-      <Counter setCount={setCount}>Count is {count}</Counter>
-      <List items={["coffee", "Tacos", "Code"]} render={(item: string) => <span className="gold">{item}</span>} />
-    </>
+    <div className="bg-blue-600 w-screen flex flex-col items-center gap-6 p-4 h-screen">
+      <h1 className=" text-white uppercase text-3xl text-center">taskify</h1>
+      <InputField todo={todo} setTodo={setTodo} handleAdd={handleAdd}/>
+      <TodoList todos={todos} setTodos={setTodos} />
+    </div>
   )
 }
 
